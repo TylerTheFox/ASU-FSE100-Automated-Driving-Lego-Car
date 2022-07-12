@@ -1,0 +1,36 @@
+cmake_minimum_required(VERSION 3.2)
+project (TIPBOT)
+set (CMAKE_CXX_STANDARD 11)
+
+include_directories(
+	extern/sleepy-discord/include 
+	extern/poco-1.9.0/Foundation/include 
+	extern/poco-1.9.0/JSON/include 
+	extern/poco-1.9.0/Net/include 
+	extern/poco-1.9.0/Util/include 
+    )
+	
+if (MSVC)
+  link_directories(
+	extern/sleepy-discord/lib/win32
+	extern/poco-1.9.0/lib/win32
+    )
+
+else()
+  find_package(Threads REQUIRED)
+  link_directories(
+	extern/sleepy-discord/lib/linux
+	extern/poco-1.9.0/lib/linux 
+    )
+	target_link_libraries(TIPBOT      		"libPocoJSON.a"
+											"libPocoUtil.a"
+											"libPocoNet.a"
+											"libPocoFoundation.a"
+											"libsleepy_discord.a"
+											"pthread"
+											"curl"
+											"ssl"
+											"crypton")			 
+endif()
+
+add_executable(TipBot src/Account.cpp src/AccountException.cpp src/DiscordCommands.cpp src/Discord.cpp src/main.cpp src/RPC.cpp src/RPCException.cpp src/Util.cpp)
